@@ -1,15 +1,15 @@
 import React from 'react';
 
-type IconProps = {
+type Props = {
   icon: React.ReactNode;
-  label: string;
+  label?: string;
 };
 
-export default function Icon({ icon, label }: IconProps) {
+export default function Icon({ icon, label }: Props) {
   return (
     <div>
       {icon}
-      <span>{label}</span>
+      {label && <span>{label}</span>}
     </div>
   );
 }

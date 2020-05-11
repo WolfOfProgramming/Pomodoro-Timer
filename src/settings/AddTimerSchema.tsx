@@ -1,6 +1,7 @@
 import React from 'react';
 import NumberInput from './NumberInput';
 import { useTimerSchemaReducer } from './useTimerSchemaReducer';
+import Input from './Input';
 
 export default function AddTimerSchema() {
   const {
@@ -27,37 +28,35 @@ export default function AddTimerSchema() {
   return (
     <form onSubmit={handleSubmit}>
       <h3>Add Timer Option</h3>
-      <input
-        type='text'
-        id='Set timer schema name'
-        name='Set timer schema name'
+      <Input
+        label='Set timer schema name'
         value={schemaName}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setSchemaName(e.target.value)
-        }
+        onChange={setSchemaName}
       />
-      <label htmlFor='Set timer schema name'>Set timer schema name</label>
       <NumberInput
         label='Set timer duration'
         value={timerDuration}
+        min={1}
         onChange={setTimerDuration}
       />
       <NumberInput
         label='Set short break duration'
         value={shortBreakDuration}
+        min={1}
         onChange={setShortBreakDuration}
       />
       <NumberInput
         label='Set long break duration'
         value={longBreakDuration}
+        min={1}
         onChange={setLongBreakDuration}
       />
       <NumberInput
         label='Set elapsed timers to long break'
         value={elapsedTimersToLongBreak}
+        min={1}
         onChange={setElapsedTimersToLongBreak}
       />
-      <button type='submit'>Add</button>
     </form>
   );
 }

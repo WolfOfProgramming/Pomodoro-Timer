@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TimerDigits from './TimerDigits';
 import { useTimerReducer } from './useTimerReducer';
-import IncreaseTimeContainer from './IncreaseTimeContainer';
-import Button from './Button';
-import TimerControls from './TimerControls';
+import Button, { ButtonClasses } from './Button';
+import { useInterval } from './useInterval';
 
 export default function Timer() {
   const {
     time,
     isActivated,
-    timerSchema,
     start,
     stop,
     reset,
@@ -19,52 +17,47 @@ export default function Timer() {
     increaseTimeByTwentyMin,
   } = useTimerReducer();
 
-  useEffect(() => {
-    if (isActivated) {
-      const intervalID = setInterval(decreaseTime, 1000);
-      return () => clearInterval(intervalID);
-    }
-  }, [isActivated]);
+  useInterval(decreaseTime, isActivated ? 1000 : null);
 
   return (
     <div>
       <TimerDigits time={time} />
 
-      <IncreaseTimeContainer>
+      <div className='time-prolongers-wrapper'>
         <Button
-          label='1'
+          label='Add 1 minute'
           onClick={increaseTimeByOneMin}
-          className='Button Button--type-square'
+          className={ButtonClasses.BtnSquare}
         />
         <Button
-          label='5'
+          label='Add 5 minutes'
           onClick={increaseTimeByFiveMin}
-          className='Button Button--type-square'
+          className={ButtonClasses.BtnSquare}
         />
         <Button
-          label='20'
+          label='Add 20 minutes'
           onClick={increaseTimeByTwentyMin}
-          className='Button Button--type-square'
+          className={ButtonClasses.BtnSquare}
         />
-      </IncreaseTimeContainer>
+      </div>
 
-      <TimerControls>
+      <div className='time-control-wrapper'>
         <Button
-          label='Change Time Schema'
+          label='Choose time schema'
           onClick={() => {}}
-          className='Button Button--type-control'
+          className={ButtonClasses.BtnControl}
         />
         <Button
           label={isActivated ? 'Stop' : 'Start'}
           onClick={isActivated ? stop : start}
-          className='Button Button--type-control'
+          className={ButtonClasses.BtnControl}
         />
         <Button
           label='Reset'
           onClick={reset}
-          className='Button Button--type-control'
+          className={ButtonClasses.BtnControl}
         />
-      </TimerControls>
+      </div>
     </div>
   );
 }

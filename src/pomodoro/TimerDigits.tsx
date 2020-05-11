@@ -1,6 +1,6 @@
 import React from 'react';
 
-type TimerDigitsProps = {
+type Props = {
   time: number;
 };
 
@@ -11,7 +11,7 @@ function formatTime(time: number) {
   return `${minutes}:${seconds}`;
 }
 
-export default function TimerDigits({ time }: TimerDigitsProps) {
+export default function TimerDigits({ time }: Props) {
   const formattedTime: string = formatTime(time);
   return <time>{formattedTime}</time>;
 }

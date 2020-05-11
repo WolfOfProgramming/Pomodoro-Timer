@@ -3,8 +3,8 @@ import Toggle from './Toggle';
 import AddTimerSchema from './AddTimerSchema';
 
 export default function Settings() {
-  const [isAutoStartTimer, setIsAutoStartTimer] = useState(() => false);
-  const [isAutoStartBreak, setIsAutoStartBreak] = useState(() => false);
+  const [isAutoStartTimer, setIsAutoStartTimer] = useState(false);
+  const [isAutoStartBreak, setIsAutoStartBreak] = useState(false);
 
   const toggleIsAutoStartTimer = () =>
     setIsAutoStartTimer((prevState) => !prevState);

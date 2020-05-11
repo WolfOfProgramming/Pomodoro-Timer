@@ -1,33 +1,20 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
-type NumberInputProps = {
+type Props = {
   label: string;
   value: number;
-  onChange: (x: number) => void;
+  min: number;
+  onChange: (value: number) => void;
 };
 
-export default function NumberInput({
-  label,
-  value,
-  onChange,
-}: NumberInputProps) {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (Number.isSafeInteger(Number(value))) {
-      onChange(Number(value));
-    }
-  };
+export default function NumberInput({ label, value, onChange, min }: Props) {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+    onChange(Number(e.target.value));
 
   return (
-    <React.Fragment>
-      <input
-        type='text'
-        id={label}
-        name={label}
-        value={value}
-        onChange={handleChange}
-      />
-      <label htmlFor={label}>{label}</label>
-    </React.Fragment>
+    <label>
+      {label}
+      <input type='number' value={value} min={min} onChange={handleChange} />
+    </label>
   );
 }

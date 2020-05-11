@@ -6,7 +6,7 @@ const MINUTE_IN_SECONDS = 60;
 const FIVE_MINUTES_IN_SECONDS = MINUTE_IN_SECONDS * 5;
 const TWENTY_MINUTES_IN_SECONDS = MINUTE_IN_SECONDS * 20;
 
-const INITIAL_OBJECT: State = {
+const INITIAL_STATE: State = {
   time: DEFAULT_TIMER_SCHEMA.timerDuration * MINUTE_IN_SECONDS,
   isActivated: false,
   timerSchema: DEFAULT_TIMER_SCHEMA,
@@ -17,9 +17,7 @@ enum ActionTypes {
   Stop = 'stop',
   Reset = 'reset',
   DecreaseTime = 'decreaseTime',
-  IncreaseTimeByOneMin = 'increaseTimerByOneMin',
-  IncreaseTimeByFiveMin = 'increaseTimerByFiveMin',
-  IncreaseTimeByTwentyMin = 'increaseTimerByTwentyMin',
+  IncreaseTime = 'increaseTime',
   ChangeTimerSchema = 'changeTimerSchema',
 }
 
@@ -29,9 +27,25 @@ type State = {
   timerSchema: TimerSchema;
 };
 
-type Action = {
-  type: ActionTypes;
+type IncreaseTime = {
+  type: ActionTypes.IncreaseTime;
+  timeAmount: number;
 };
+
+type DecreaseTime = {
+  type: ActionTypes.DecreaseTime;
+  timeAmount: number;
+};
+
+type EffectAction = {
+  type:
+    | ActionTypes.ChangeTimerSchema
+    | ActionTypes.Reset
+    | ActionTypes.Start
+    | ActionTypes.Stop;
+};
+
+type Action = IncreaseTime | DecreaseTime | EffectAction;
 
 function timerReducer(state: State, action: Action): State {
   switch (action.type) {
@@ -39,37 +53,44 @@ function timerReducer(state: State, action: Action): State {
       return { ...state, isActivated: true };
     case ActionTypes.Stop:
       return { ...state, isActivated: false };
-    case ActionTypes.Reset:
-      return { ...state };
     case ActionTypes.DecreaseTime:
-      return { ...state, time: state.time - 1 };
-    case ActionTypes.IncreaseTimeByOneMin:
-      return { ...state, time: state.time + MINUTE_IN_SECONDS };
-    case ActionTypes.IncreaseTimeByFiveMin:
-      return { ...state, time: state.time + FIVE_MINUTES_IN_SECONDS };
-    case ActionTypes.IncreaseTimeByTwentyMin:
-      return { ...state, time: state.time + TWENTY_MINUTES_IN_SECONDS };
+      return { ...state, time: state.time - action.timeAmount };
+    case ActionTypes.IncreaseTime:
+      return { ...state, time: state.time + action.timeAmount };
     case ActionTypes.ChangeTimerSchema:
+      // To Do
       return { ...state };
+    case ActionTypes.Reset:
+      return INITIAL_STATE;
   }
 }
 
 export function useTimerReducer() {
-  const [state, dispatch] = useReducer(timerReducer, INITIAL_OBJECT);
+  const [state, dispatch] = useReducer(timerReducer, INITIAL_STATE);
 
   const start = () => dispatch({ type: ActionTypes.Start });
   const stop = () => dispatch({ type: ActionTypes.Stop });
   const reset = () => dispatch({ type: ActionTypes.Reset });
-  const decreaseTime = () => dispatch({ type: ActionTypes.DecreaseTime });
+  const decreaseTime = () =>
+    dispatch({ type: ActionTypes.DecreaseTime, timeAmount: 1 });
 
   const increaseTimeByOneMin = () =>
-    dispatch({ type: ActionTypes.IncreaseTimeByOneMin });
+    dispatch({
+      type: ActionTypes.IncreaseTime,
+      timeAmount: MINUTE_IN_SECONDS,
+    });
 
   const increaseTimeByFiveMin = () =>
-    dispatch({ type: ActionTypes.IncreaseTimeByFiveMin });
+    dispatch({
+      type: ActionTypes.IncreaseTime,
+      timeAmount: FIVE_MINUTES_IN_SECONDS,
+    });
 
   const increaseTimeByTwentyMin = () =>
-    dispatch({ type: ActionTypes.IncreaseTimeByTwentyMin });
+    dispatch({
+      type: ActionTypes.IncreaseTime,
+      timeAmount: TWENTY_MINUTES_IN_SECONDS,
+    });
 
   const { time, isActivated, timerSchema } = state;
 
